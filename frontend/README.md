@@ -34,3 +34,30 @@ You can check out [the Next.js GitHub repository](https://github.com/vercel/next
 The easiest way to deploy your Next.js app is to use the [Vercel Platform](https://vercel.com/new?utm_medium=default-template&filter=next.js&utm_source=create-next-app&utm_campaign=create-next-app-readme) from the creators of Next.js.
 
 Check out our [Next.js deployment documentation](https://nextjs.org/docs/app/building-your-application/deploying) for more details.
+
+## Deployment (Vercel & GitHub)
+
+### Frontend (Vercel)
+1) Fork/Import this repo in Vercel.
+2) Framework: Next.js. Root directory: rontend.
+3) Env vars:
+   - NEXT_PUBLIC_SERVER_URL = your server URL (e.g., https://your-api.example.com)
+4) Build command: 
+pm run build (Vercel defaults). Output: .vercel/output (auto for Next 15).
+5) Redeploy.
+
+### Backend (Options)
+- Local dev: run Go server on your machine at http://localhost:8080.
+- Cloud VM/Render/Fly/Heroku: deploy the server folder as a standalone Go service.
+- Update the frontend env var to the public backend URL.
+
+### GitHub Pages
+- Next.js SSR features need a Node runtime. For purely static export, you can add output: 'export' in 
+ext.config.ts and avoid SSR/websocket features; otherwise prefer Vercel.
+
+### Environment
+- See rontend/.env.example. Create .env.local in rontend/ with:
+`
+NEXT_PUBLIC_SERVER_URL=http://localhost:8080
+`
+
