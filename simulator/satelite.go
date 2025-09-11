@@ -9,6 +9,8 @@ import (
 	"math"
 	"math/rand"
 	"net/http"
+	"os"
+	"strconv"
 	"time"
 )
 
@@ -171,6 +173,13 @@ func main() {
 	numSatellites := flag.Int("satellites", 5, "Number of satellites to simulate")
 	port := flag.Int("port", 9090, "Port to run the HTTP server on")
 	flag.Parse()
+
+	// Override port from environment variable (Railway provides PORT)
+	if portEnv := os.Getenv("PORT"); portEnv != "" {
+		if p, err := strconv.Atoi(portEnv); err == nil {
+			*port = p
+		}
+	}
 
 	// Seed the random number generator
 	rand.Seed(time.Now().UnixNano())
