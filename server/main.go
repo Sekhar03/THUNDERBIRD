@@ -23,6 +23,7 @@ import (
 // Config represents the system configuration
 type Config struct {
 	SimulatorAddress string
+	QuantumServiceURL string
 	SystemMode       string
 	Port             string
 }
@@ -81,6 +82,7 @@ type AIMetrics struct {
 var (
 	config = Config{
 		SimulatorAddress: "http://localhost:9090",
+		QuantumServiceURL: "http://localhost:8081",
 		SystemMode:       "realtime",
 		Port:             "8080",
 	}
@@ -114,6 +116,16 @@ func main() {
 	// Override port from environment variable (Railway provides PORT)
 	if port := os.Getenv("PORT"); port != "" {
 		config.Port = port
+	}
+
+	// Override simulator address from environment variable
+	if simulatorAddr := os.Getenv("SIMULATOR_URL"); simulatorAddr != "" {
+		config.SimulatorAddress = simulatorAddr
+	}
+
+	// Override quantum service URL from environment variable
+	if quantumURL := os.Getenv("QUANTUM_URL"); quantumURL != "" {
+		config.QuantumServiceURL = quantumURL
 	}
 
 	// Set up HTTP routes with CORS middleware
