@@ -6,11 +6,7 @@ import {
   Moon, 
   Download, 
   FileText, 
-  Image, 
-  Settings,
-  Palette,
-  Eye,
-  EyeOff
+  Settings
 } from 'lucide-react';
 
 interface ThemeToggleProps {

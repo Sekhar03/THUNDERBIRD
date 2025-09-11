@@ -1,5 +1,5 @@
 'use client';
-import React, { useState, useEffect, useRef } from 'react';
+import React, { useState, useEffect, useCallback } from 'react';
 import { Card, CardHeader, CardTitle, CardContent } from '@/components/ui/card';
 import { Button } from '@/components/ui/button';
 import { Badge } from '@/components/ui/badge';
@@ -12,8 +12,7 @@ import {
   MessageSquare,
   Brain,
   Zap,
-  Globe,
-  Shield
+  
 } from 'lucide-react';
 
 interface VoiceControlProps {
@@ -33,7 +32,7 @@ const VoiceControl: React.FC<VoiceControlProps> = ({ onCommand }) => {
   const [isEnabled, setIsEnabled] = useState(false);
   const [transcript, setTranscript] = useState('');
   const [commands, setCommands] = useState<VoiceCommand[]>([]);
-  const [recognition, setRecognition] = useState<any>(null);
+  const [recognition, setRecognition] = useState<SpeechRecognition | null>(null);
   const [language, setLanguage] = useState('en-US');
 
   const voiceCommands = {
@@ -75,8 +74,8 @@ const VoiceControl: React.FC<VoiceControlProps> = ({ onCommand }) => {
   useEffect(() => {
     // Initialize speech recognition
     if (typeof window !== 'undefined' && 'webkitSpeechRecognition' in window) {
-      const SpeechRecognition = (window as any).webkitSpeechRecognition;
-      const recognition = new SpeechRecognition();
+      const SR: typeof window extends { webkitSpeechRecognition: infer T } ? new () => SpeechRecognition : any = (window as any).webkitSpeechRecognition;
+      const recognition = new SR();
       
       recognition.continuous = true;
       recognition.interimResults = true;
@@ -87,7 +86,7 @@ const VoiceControl: React.FC<VoiceControlProps> = ({ onCommand }) => {
         setTranscript('');
       };
 
-      recognition.onresult = (event: any) => {
+      recognition.onresult = (event: SpeechRecognitionEvent) => {
         let finalTranscript = '';
         for (let i = event.resultIndex; i < event.results.length; i++) {
           if (event.results[i].isFinal) {
@@ -97,7 +96,7 @@ const VoiceControl: React.FC<VoiceControlProps> = ({ onCommand }) => {
         setTranscript(finalTranscript);
       };
 
-      recognition.onerror = (event: any) => {
+      recognition.onerror = (event: SpeechRecognitionErrorEvent) => {
         console.error('Speech recognition error:', event.error);
         setIsListening(false);
       };
@@ -114,7 +113,7 @@ const VoiceControl: React.FC<VoiceControlProps> = ({ onCommand }) => {
     }
   }, [language]);
 
-  const processCommand = (command: string) => {
+  const processCommand = useCallback((command: string) => {
     const lowerCommand = command.toLowerCase();
     let response = 'Command not recognized';
     let status: 'success' | 'error' | 'processing' = 'error';
@@ -126,7 +125,7 @@ const VoiceControl: React.FC<VoiceControlProps> = ({ onCommand }) => {
           response = handler();
           status = 'success';
           break;
-        } catch (error) {
+        } catch {
           response = 'Error executing command';
           status = 'error';
         }
@@ -144,7 +143,7 @@ const VoiceControl: React.FC<VoiceControlProps> = ({ onCommand }) => {
 
     setCommands(prev => [newCommand, ...prev.slice(0, 9)]);
     setTranscript('');
-  };
+  }, [voiceCommands]);
 
   const startListening = () => {
     if (recognition && isEnabled) {
@@ -243,14 +242,14 @@ const VoiceControl: React.FC<VoiceControlProps> = ({ onCommand }) => {
             <div className="bg-black/20 rounded-lg p-3 border border-indigo-500/20">
               <h4 className="text-sm font-medium text-indigo-300 mb-2">Available Commands:</h4>
               <div className="space-y-1 text-xs text-gray-400">
-                <div>• "Switch to realtime mode"</div>
-                <div>• "Switch to scenario mode"</div>
-                <div>• "Show satellite status"</div>
-                <div>• "Check system health"</div>
-                <div>• "Activate quantum security"</div>
-                <div>• "Run threat detection"</div>
-                <div>• "Export data"</div>
-                <div>• "System status"</div>
+                <div>• &quot;Switch to realtime mode&quot;</div>
+                <div>• &quot;Switch to scenario mode&quot;</div>
+                <div>• &quot;Show satellite status&quot;</div>
+                <div>• &quot;Check system health&quot;</div>
+                <div>• &quot;Activate quantum security&quot;</div>
+                <div>• &quot;Run threat detection&quot;</div>
+                <div>• &quot;Export data&quot;</div>
+                <div>• &quot;System status&quot;</div>
               </div>
             </div>
 

@@ -12,19 +12,15 @@ import {
   Activity,
   Zap,
   Target,
-  Crosshair,
   CheckCircle,
-  XCircle,
   Clock,
   TrendingUp,
   TrendingDown,
-  AlertCircle,
-  Lock,
-  Unlock
+  AlertCircle
 } from 'lucide-react';
 
 interface AIThreatDetectionProps {
-  systemData: any;
+  systemData: unknown;
 }
 
 interface Threat {
@@ -49,10 +45,10 @@ interface Anomaly {
   severity: 'low' | 'medium' | 'high';
 }
 
-const AIThreatDetection: React.FC<AIThreatDetectionProps> = ({ systemData }) => {
+const AIThreatDetection: React.FC<AIThreatDetectionProps> = ({ systemData: _systemData }) => {
   const [threats, setThreats] = useState<Threat[]>([]);
   const [anomalies, setAnomalies] = useState<Anomaly[]>([]);
-  const [aiStatus, setAiStatus] = useState<'active' | 'learning' | 'updating'>('active');
+  const [aiStatus] = useState<'active' | 'learning' | 'updating'>('active');
   const [detectionMode, setDetectionMode] = useState<'auto' | 'manual' | 'enhanced'>('auto');
   const [isMonitoring, setIsMonitoring] = useState(true);
 

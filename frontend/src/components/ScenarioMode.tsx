@@ -12,8 +12,7 @@ import {
   Clock,
   Activity,
   AlertCircle,
-  TrendingUp,
-  TrendingDown
+  TrendingUp
 } from 'lucide-react';
 
 interface ScenarioModeProps {

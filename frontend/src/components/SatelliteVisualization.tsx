@@ -7,7 +7,7 @@ import { Globe, Orbit, RotateCcw, Play, Pause, Satellite as SatelliteIcon } from
 import * as THREE from 'three';
 
 interface SatelliteVisualizationProps {
-  satellites: any[];
+  satellites: Array<{ id: string; name: string; status: string; altitude?: number; quantumKeyId?: string }>;
 }
 
 type OrbitingSatellite = {
@@ -29,7 +29,7 @@ const SatelliteVisualization: React.FC<SatelliteVisualizationProps> = ({ satelli
   const labelsGroupRef = useRef<THREE.Group | null>(null);
   const arrowsGroupRef = useRef<THREE.Group | null>(null);
   
-  const rafRef = useRef<number>();
+  const rafRef = useRef<number | null>(null);
   const maxRadiusRef = useRef<number>(6);
   const [isPlaying, setIsPlaying] = useState(true);
   const [selectedId, setSelectedId] = useState<string | null>(null);
@@ -147,7 +147,9 @@ const SatelliteVisualization: React.FC<SatelliteVisualizationProps> = ({ satelli
       const mat = new THREE.LineDashedMaterial({ color: 0x4b5563, dashSize: 0.3, gapSize: 0.2 });
       const line = new THREE.Line(geom, mat);
       
-      line.computeLineDistances && line.computeLineDistances();
+      if (typeof (line as any).computeLineDistances === 'function') {
+        (line as any).computeLineDistances();
+      }
       return line;
     };
 

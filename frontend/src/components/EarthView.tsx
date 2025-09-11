@@ -28,7 +28,7 @@ const EarthView: React.FC<EarthViewProps> = ({ satellites }) => {
   const pointerInteractionMovement = useRef(0);
   const [width, setWidth] = useState(0);
   const [r, setR] = useState(0);
-  let phi = 0;
+  const phiRef = useRef(0);
 
   const updatePointerInteraction = (value: number | null) => {
     pointerInteracting.current = value;
@@ -48,15 +48,15 @@ const EarthView: React.FC<EarthViewProps> = ({ satellites }) => {
   // eslint-disable-next-line @typescript-eslint/no-explicit-any
   const onRender = useCallback((state: any) => {
     if (!pointerInteracting.current) {
-      phi += 0.005;
+      phiRef.current += 0.005;
     }
-    state.phi = phi + r;
+    state.phi = phiRef.current + r;
     state.width = width;
     state.height = width;
   }, [r, width]);
 
   useEffect(() => {
-    const markers = satellites.map(satellite => {
+    const markers: { location: [number, number]; size: number; color: [number, number, number] }[] = satellites.map(satellite => {
       // Convert Cartesian to Spherical coordinates
       const x = satellite.position.x;
       const y = satellite.position.y;
@@ -70,7 +70,7 @@ const EarthView: React.FC<EarthViewProps> = ({ satellites }) => {
       return {
         location: [latitude, longitude] as [number, number],
         size: 0.05,
-        color: satellite.status === 'operational' ? [0, 1, 0] : [1, 0, 0],
+        color: (satellite.status === 'operational' ? [0, 1, 0] : [1, 0, 0]) as [number, number, number],
       };
     });
 
@@ -109,7 +109,7 @@ const EarthView: React.FC<EarthViewProps> = ({ satellites }) => {
       globe.destroy();
       window.removeEventListener('resize', onResize);
     };
-  }, [satellites, onRender]);
+  }, [satellites, onRender, width]);
 
   const operationalCount = satellites.filter(s => s.status === 'operational').length;
 

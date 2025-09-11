@@ -23,23 +23,22 @@ import {
 } from 'recharts';
 import { 
   TrendingUp, 
-  TrendingDown, 
-  Activity, 
-  Satellite, 
   Shield, 
   Wifi, 
-  Zap,
-  Globe,
-  AlertTriangle,
   CheckCircle,
-  Clock,
   BarChart3,
   PieChart as PieChartIcon,
   LineChart as LineChartIcon
 } from 'lucide-react';
 
+interface SystemDataMinimal {
+  satellites?: Array<{ status?: string }>;
+  quantumKeyPool?: number;
+  activeChannels?: number;
+}
+
 interface AnalyticsDashboardProps {
-  systemData: any;
+  systemData: SystemDataMinimal;
 }
 
 interface ChartData {
@@ -53,7 +52,7 @@ const AnalyticsDashboard: React.FC<AnalyticsDashboardProps> = ({ systemData }) =
   const [timeRange, setTimeRange] = useState<'1h' | '6h' | '24h' | '7d'>('1h');
   const [performanceData, setPerformanceData] = useState<ChartData[]>([]);
   const [securityData, setSecurityData] = useState<ChartData[]>([]);
-  const [networkData, setNetworkData] = useState<ChartData[]>([]);
+  // const [networkData, setNetworkData] = useState<ChartData[]>([]);
 
   // Generate mock data for charts
   useEffect(() => {
@@ -67,7 +66,7 @@ const AnalyticsDashboard: React.FC<AnalyticsDashboardProps> = ({ systemData }) =
 
     setPerformanceData(generateData(85, 20, 60));
     setSecurityData(generateData(95, 10, 60));
-    setNetworkData(generateData(78, 25, 60));
+    // setNetworkData(generateData(78, 25, 60));
   }, []);
 
   const COLORS = ['#0088FE', '#00C49F', '#FFBB28', '#FF8042', '#8884D8'];
@@ -102,7 +101,6 @@ const AnalyticsDashboard: React.FC<AnalyticsDashboardProps> = ({ systemData }) =
                   activeDot={{ r: 6, stroke: '#3B82F6', strokeWidth: 2 }}
                 >
                   {/* Data labels */}
-                  {/* @ts-expect-error recharts LabelList typing */}
                   <LabelList dataKey="value" position="top" fill="#9CA3AF" fontSize={11} />
                 </Line>
               </LineChart>
@@ -134,7 +132,6 @@ const AnalyticsDashboard: React.FC<AnalyticsDashboardProps> = ({ systemData }) =
                   fillOpacity={0.3}
                   strokeWidth={2}
                 >
-                  {/* @ts-expect-error recharts LabelList typing */}
                   <LabelList dataKey="value" position="top" fill="#9CA3AF" fontSize={11} />
                 </Area>
               </AreaChart>
@@ -159,7 +156,6 @@ const AnalyticsDashboard: React.FC<AnalyticsDashboardProps> = ({ systemData }) =
                   }}
                 />
                 <Bar dataKey="value" fill="#3B82F6" radius={[4, 4, 0, 0]}>
-                  {/* @ts-expect-error recharts LabelList typing */}
                   <LabelList dataKey="value" position="top" fill="#9CA3AF" fontSize={11} />
                 </Bar>
               </BarChart>
@@ -177,7 +173,11 @@ const AnalyticsDashboard: React.FC<AnalyticsDashboardProps> = ({ systemData }) =
                   cx="50%"
                   cy="50%"
                   labelLine={false}
-                  label={({ name, percent }) => `${name}: ${(percent * 100).toFixed(0)}%`}
+                  label={({ name, percent }) => {
+                    const safePercent = typeof percent === 'number' ? percent : 0;
+                    const safeName = typeof name === 'string' || typeof name === 'number' ? String(name) : '';
+                    return `${safeName}: ${(safePercent * 100).toFixed(0)}%`;
+                  }}
                   outerRadius={80}
                   fill="#8884d8"
                   dataKey="value"
@@ -217,8 +217,8 @@ const AnalyticsDashboard: React.FC<AnalyticsDashboardProps> = ({ systemData }) =
   };
 
   const getNetworkPerformance = () => {
-    const activeChannels = systemData?.activeChannels || 0;
-    const totalChannels = systemData?.satellites?.length || 0;
+    const activeChannels = systemData?.activeChannels ?? 0;
+    const totalChannels = systemData?.satellites?.length ?? 0;
     return totalChannels > 0 ? (activeChannels / totalChannels) * 100 : 0;
   };
 
