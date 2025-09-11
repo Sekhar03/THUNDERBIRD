@@ -66,7 +66,9 @@ export default function Home() {
     const connectWebSocket = () => {
       if (ws) ws.close();
 
-      ws = new WebSocket('ws://localhost:8080/ws');
+      const base = process.env.NEXT_PUBLIC_SERVER_URL || 'http://localhost:8080';
+      const wsUrl = base.replace(/^http/, 'ws') + '/ws';
+      ws = new WebSocket(wsUrl);
 
       ws.onopen = () => {
         console.log('Connected to ThunderBird server');
@@ -105,7 +107,8 @@ export default function Home() {
 
   const changeMode = async (mode: string) => {
     try {
-      const response = await fetch('http://localhost:8080/api/mode', {
+      const base = process.env.NEXT_PUBLIC_SERVER_URL || 'http://localhost:8080';
+      const response = await fetch(`${base}/api/mode`, {
         method: 'POST',
         headers: { 'Content-Type': 'application/json' },
         body: JSON.stringify({ mode }),
