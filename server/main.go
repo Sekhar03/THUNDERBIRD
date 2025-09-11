@@ -109,7 +109,11 @@ func main() {
 	err := godotenv.Load()
 	if err != nil {
 		log.Println("Warning: .env file not found, using defaults")
-		setupInteractiveConfig()
+	}
+
+	// Override port from environment variable (Railway provides PORT)
+	if port := os.Getenv("PORT"); port != "" {
+		config.Port = port
 	}
 
 	// Set up HTTP routes with CORS middleware
