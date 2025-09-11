@@ -22,10 +22,10 @@ import (
 
 // Config represents the system configuration
 type Config struct {
-	SimulatorAddress string
+	SimulatorAddress  string
 	QuantumServiceURL string
-	SystemMode       string
-	Port             string
+	SystemMode        string
+	Port              string
 }
 
 // Satellite represents a satellite in the system
@@ -81,10 +81,10 @@ type AIMetrics struct {
 
 var (
 	config = Config{
-		SimulatorAddress: "http://localhost:9090",
+		SimulatorAddress:  "http://localhost:9090",
 		QuantumServiceURL: "http://localhost:8081",
-		SystemMode:       "realtime",
-		Port:             "8080",
+		SystemMode:        "realtime",
+		Port:              "8080",
 	}
 	upgrader = websocket.Upgrader{
 		CheckOrigin: func(r *http.Request) bool { return true },
