@@ -4,7 +4,7 @@
     "builder": "NIXPACKS"
   },
   "deploy": {
-    "startCommand": "go run satelite.go -port=$PORT",
+    "startCommand": "go build -o simulator . && ./simulator",
     "restartPolicyType": "ON_FAILURE",
     "restartPolicyMaxRetries": 10
   }

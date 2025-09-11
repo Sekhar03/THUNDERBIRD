@@ -4,25 +4,25 @@ Write-Host ""
 
 # Start Go Server
 Write-Host "Starting Go Server (Port 8080)..." -ForegroundColor Yellow
-Start-Process powershell -ArgumentList "-NoExit", "-Command", "cd server; go run main.go"
+Start-Process powershell -ArgumentList "-NoExit", "-Command", "cd 'C:\Users\sekha\OneDrive\Desktop\Projects\thunderbird\server'; go run main.go"
 
 Start-Sleep -Seconds 3
 
 # Start Satellite Simulator
 Write-Host "Starting Satellite Simulator (Port 9090)..." -ForegroundColor Yellow
-Start-Process powershell -ArgumentList "-NoExit", "-Command", "cd simulator; go run satelite.go"
+Start-Process powershell -ArgumentList "-NoExit", "-Command", "cd 'C:\Users\sekha\OneDrive\Desktop\Projects\thunderbird\simulator'; go run satelite.go"
 
 Start-Sleep -Seconds 3
 
 # Start Quantum Service
 Write-Host "Starting Quantum Service (Port 8081)..." -ForegroundColor Yellow
-Start-Process powershell -ArgumentList "-NoExit", "-Command", "cd server\quantum; python quantum_server.py"
+Start-Process powershell -ArgumentList "-NoExit", "-Command", "cd 'C:\Users\sekha\OneDrive\Desktop\Projects\thunderbird\server\quantum'; python quantum_server.py"
 
 Start-Sleep -Seconds 3
 
 # Start Frontend
 Write-Host "Starting Frontend (Port 3000)..." -ForegroundColor Yellow
-Start-Process powershell -ArgumentList "-NoExit", "-Command", "cd frontend; npm run dev"
+Start-Process powershell -ArgumentList "-NoExit", "-Command", "cd 'C:\Users\sekha\OneDrive\Desktop\Projects\thunderbird\frontend'; npm run dev"
 
 Write-Host ""
 Write-Host "All services started!" -ForegroundColor Green
