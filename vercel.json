@@ -8,6 +8,18 @@
   ],
   "routes": [
     {
+      "src": "/api/(.*)",
+      "dest": "https://your-server.railway.app/$1"
+    },
+    {
+      "src": "/ws",
+      "dest": "https://your-server.railway.app/ws"
+    },
+    {
+      "src": "/telemetry",
+      "dest": "https://your-simulator.railway.app/telemetry"
+    },
+    {
       "src": "/(.*)",
       "dest": "frontend/$1"
     }
