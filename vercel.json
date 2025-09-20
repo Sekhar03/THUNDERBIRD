@@ -1,8 +1,66 @@
 {
   "version": 2,
   "builds": [
-    { "src": "frontend/package.json", "use": "@vercel/next" }
-  ]
+    {
+      "src": "frontend/package.json",
+      "use": "@vercel/next"
+    },
+    {
+      "src": "server/main.go",
+      "use": "@vercel/go"
+    },
+    {
+      "src": "simulator/satelite.go",
+      "use": "@vercel/go"
+    }
+  ],
+  "routes": [
+    {
+      "src": "/api/server/(.*)",
+      "dest": "/server/main.go"
+    },
+    {
+      "src": "/api/simulator/(.*)",
+      "dest": "/simulator/satelite.go"
+    },
+    {
+      "src": "/ws",
+      "dest": "/server/main.go"
+    },
+    {
+      "src": "/telemetry",
+      "dest": "/simulator/satelite.go"
+    },
+    {
+      "src": "/api/status",
+      "dest": "/server/main.go"
+    },
+    {
+      "src": "/api/mode",
+      "dest": "/server/main.go"
+    },
+    {
+      "src": "/(.*)",
+      "dest": "/frontend/$1"
+    }
+  ],
+  "env": {
+    "SIMULATOR_URL": "https://your-project.vercel.app/api/simulator",
+    "QUANTUM_URL": "https://your-project.vercel.app/api/server",
+    "PORT": "8080"
+  },
+  "functions": {
+    "server/main.go": {
+      "maxDuration": 30,
+      "memory": 1024
+    },
+    "simulator/satelite.go": {
+      "maxDuration": 30,
+      "memory": 512
+    }
+  },
+  "regions": ["iad1"],
+  "framework": "nextjs"
 }
 
 
