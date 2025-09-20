@@ -1,59 +1,74 @@
 # ThunderBird Deployment Guide
 
+This project deploys the frontend on Vercel and the long‑running Go services on Railway. Vercel proxies requests to the Railway backends via environment variables.
+
+## 🚀 Updated Architecture
+
+**Frontend (Vercel)**: Next.js application with API proxy routes
+**Backend Services (Railway)**: Go services running as persistent servers
+**Communication**: Frontend API routes proxy requests to Railway services
+
 ## 🚀 Railway Services Deployment
 
-### 1. Main Go Server
-- **Repository**: Sekhar03/THUNDERBIRD
-- **Root Directory**: `server`
-- **Build Command**: `go build -o main .`
-- **Start Command**: `./main`
-- **Environment Variables** (set after getting other URLs):
-  - `SIMULATOR_URL` = `https://your-simulator.railway.app`
-  - `QUANTUM_URL` = `https://your-quantum.railway.app`
+### 1) Main Go Server (server/)
+- Root: `server`
+- Build: `go build -o main .`
+- Start: `./main`
+- Env (optional):
+  - `SIMULATOR_URL` = `https://your-simulator.up.railway.app`
+  - `QUANTUM_URL` = `https://your-quantum.up.railway.app`
+  - `PORT` is provided by Railway automatically
 
-### 2. Satellite Simulator
-- **Repository**: Sekhar03/THUNDERBIRD
-- **Root Directory**: `simulator`
-- **Build Command**: `go build -o simulator .`
-- **Start Command**: `./simulator`
+### 2) Satellite Simulator (simulator/)
+- Root: `simulator`
+- Build: `go build -o simulator .`
+- Start: `./simulator`
+- `PORT` is provided by Railway automatically
 
-### 3. Quantum Key Service
-- **Repository**: Sekhar03/THUNDERBIRD
-- **Root Directory**: `server/quantum`
-- **Build Command**: `pip install -r requirements.txt`
-- **Start Command**: `python quantum_server.py`
+### 3) Quantum Key Service (optional)
+- Root: `server/quantum`
+- Build: `pip install -r requirements.txt`
+- Start: `python quantum_server.py`
 
-## 🔧 Vercel Configuration
+## 🔧 Vercel (frontend with API proxy)
 
-### Environment Variables to Set:
+Vercel hosts the Next.js app in `frontend/` with API routes that proxy requests to Railway services. The API routes are located in `frontend/src/app/api/`.
+
+### Environment variables to set in Vercel
 ```
-NEXT_PUBLIC_SERVER_URL=https://your-main-server.railway.app
-NEXT_PUBLIC_SIMULATOR_URL=https://your-simulator.railway.app
-NEXT_PUBLIC_QUANTUM_URL=https://your-quantum.railway.app
+SERVER_BASE_URL=https://your-server.up.railway.app
+SIMULATOR_BASE_URL=https://your-simulator.up.railway.app
 ```
 
-### Steps:
-1. Go to Vercel → Your Project → Settings → Environment Variables
-2. Add each variable above
-3. Save and Redeploy
+Steps:
+1. Vercel → Project → Settings → Environment Variables
+2. Add the two variables above (Production and, optionally, Preview)
+3. Redeploy the project
 
-## 🧪 Testing URLs
+### API Routes Created
+- `/api/status` → Proxies to `${SERVER_BASE_URL}/api/status`
+- `/api/mode` → Proxies to `${SERVER_BASE_URL}/api/mode`
+- `/api/telemetry` → Proxies to `${SIMULATOR_BASE_URL}/telemetry`
+- `/api/ws` → Proxies to `${SERVER_BASE_URL}/ws`
 
-After deployment, test these endpoints:
+## 🧪 Verify after deploy
 
-- **Main Server Health**: `https://your-server.railway.app/api/status`
-- **Simulator Data**: `https://your-simulator.railway.app/`
-- **Quantum Service Health**: `https://your-quantum.railway.app/health`
-- **Frontend**: `https://your-vercel-app.vercel.app`
+On your Vercel domain:
+- Frontend home: `/`
+- Env check: `/health` (shows whether the two envs are set)
+- Diagnostics: `/api/ping`
+- API proxy: `/api/status` → proxies to `${SERVER_BASE_URL}/status`
+- WebSocket: `wss://<your-vercel-domain>/ws` → proxies to `${SERVER_BASE_URL}/ws`
+- Simulator telemetry: `/telemetry` → proxies to `${SIMULATOR_BASE_URL}/telemetry`
 
-## 📋 Deployment Checklist
+If any of the above return 404, ensure the two env vars are set and redeploy.
+
+## 📋 Checklist
 
 - [ ] Deploy Main Go Server to Railway
-- [ ] Deploy Satellite Simulator to Railway  
-- [ ] Deploy Quantum Service to Railway
-- [ ] Get all Railway URLs
-- [ ] Set environment variables in Vercel
-- [ ] Set environment variables in Main Server Railway project
+- [ ] Deploy Satellite Simulator to Railway
+- [ ] Copy both public Railway URLs
+- [ ] Set `SERVER_BASE_URL` and `SIMULATOR_BASE_URL` in Vercel
 - [ ] Redeploy Vercel
-- [ ] Test all services
-- [ ] Verify frontend connects to backend
+- [ ] Open `/health` and `/api/ping` on Vercel to validate envs
+- [ ] Verify `/api/status`, `/ws`, and `/telemetry` work via Vercel
