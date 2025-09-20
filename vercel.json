@@ -1,5 +1,6 @@
 {
   "version": 2,
+  "comment": "Updated deployment configuration - force new build",
   "builds": [
     {
       "src": "frontend/package.json",
