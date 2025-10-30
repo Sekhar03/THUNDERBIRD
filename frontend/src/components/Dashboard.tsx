@@ -98,7 +98,9 @@ const Dashboard: React.FC<DashboardProps> = ({ status }) => {
     <div className="space-y-6 sm:space-y-8 lg:space-y-10">
       {/* Main Dashboard Card */}
       <Card className="bg-gradient-to-br from-black/40 to-purple-900/20 backdrop-blur-xl border border-white/10 shadow-2xl rounded-2xl sm:rounded-3xl overflow-hidden">
-        <CardHeader className="bg-gradient-to-r from-blue-900/50 to-purple-900/50 border-b border-white/10 p-6 sm:p-8">
+        <CardHeader className="bg-gradient-to-r from-blue-900/40 via-purple-900/40 to-cyan-900/40 border-b border-white/15 p-6 sm:p-8 relative overflow-hidden">
+          {/* Animated background accent */}
+          <div className="absolute inset-0 bg-gradient-to-r from-blue-500/5 via-purple-500/5 to-cyan-500/5 animate-gradient-shift" style={{ backgroundSize: '200% 200%' }}></div>
           <div className="flex flex-col sm:flex-row items-start sm:items-center justify-between space-y-5 sm:space-y-0">
             <div className="flex items-center space-x-3 sm:space-x-4">
               <div className="relative">
@@ -128,7 +130,7 @@ const Dashboard: React.FC<DashboardProps> = ({ status }) => {
           </div>
         </CardHeader>
 
-        <CardContent className="p-4 sm:p-6 lg:p-8 space-y-6 sm:space-y-8">
+        <CardContent className="p-4 sm:p-6 lg:p-8 space-y-6 sm:space-y-8 relative">
           {/* Status Cards Grid */}
           <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-6 sm:gap-8">
             {/* Quantum Security Card */}
