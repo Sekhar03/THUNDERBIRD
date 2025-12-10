@@ -1,10 +1,12 @@
 {
   "version": 2,
-  "comment": "Updated deployment configuration - force new build",
   "builds": [
     {
       "src": "frontend/package.json",
-      "use": "@vercel/next"
+      "use": "@vercel/next",
+      "config": {
+        "distDir": ".next"
+      }
     }
   ],
   "routes": [
@@ -13,11 +15,9 @@
       "dest": "/frontend/$1"
     }
   ],
-  "env": {
-    "SIMULATOR_URL": "https://your-project.vercel.app/api/simulator",
-    "QUANTUM_URL": "https://your-project.vercel.app/api/server"
-  },
-  "framework": "nextjs"
+  "buildCommand": "npm run build",
+  "installCommand": "cd frontend && npm install",
+  "outputDirectory": "frontend/.next"
 }
 
 
