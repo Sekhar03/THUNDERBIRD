@@ -9,38 +9,38 @@
       }
     },
     {
-      "src": "server/api.go",
+      "src": "api/server.go",
       "use": "@vercel/go"
     },
     {
-      "src": "simulator/api.go",
+      "src": "api/simulator.go",
       "use": "@vercel/go"
     }
   ],
   "routes": [
     {
       "src": "/api/status",
-      "dest": "server/api.go"
+      "dest": "api/server.go"
     },
     {
       "src": "/api/mode",
-      "dest": "server/api.go"
+      "dest": "api/server.go"
     },
     {
       "src": "/ws",
-      "dest": "server/api.go"
+      "dest": "api/server.go"
     },
     {
       "src": "/telemetry",
-      "dest": "simulator/api.go"
+      "dest": "api/simulator.go"
     },
     {
       "src": "/api/server/(.*)",
-      "dest": "server/api.go"
+      "dest": "api/server.go"
     },
     {
       "src": "/api/simulator/(.*)",
-      "dest": "simulator/api.go"
+      "dest": "api/simulator.go"
     },
     {
       "src": "/(.*)",
