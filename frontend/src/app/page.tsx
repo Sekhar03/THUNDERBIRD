@@ -65,41 +65,83 @@ export default function Home() {
   useEffect(() => {
     let ws: WebSocket | null = null;
     let reconnectTimeout: NodeJS.Timeout;
+    let pollingInterval: NodeJS.Timeout;
+
+    const fetchStatus = async () => {
+      try {
+        const response = await fetch('/api/status');
+        if (response.ok) {
+          const data: SystemStatus = await response.json();
+          setStatus(data);
+          setConnected(true);
+          setError(null);
+        }
+      } catch (err) {
+        console.error('Polling error:', err);
+        setConnected(false);
+        setError('Connection error - Unable to connect to server');
+      }
+    };
 
     const connectWebSocket = () => {
       if (ws) ws.close();
 
-      const base = process.env.NEXT_PUBLIC_SERVER_URL || 'http://localhost:8080';
+      // Use absolute URL only in development, relative in production
+      const isDev = window.location.hostname === 'localhost';
+      const base = isDev ? 'http://localhost:8080' : window.location.origin;
+      
+      // On Vercel, we prefer polling over WebSockets due to serverless limitations
+      if (!isDev) {
+        console.log('Production environment detected, using polling fallback');
+        fetchStatus();
+        pollingInterval = setInterval(fetchStatus, 5000);
+        return;
+      }
+
       const wsUrl = base.replace(/^http/, 'ws') + '/ws';
-      ws = new WebSocket(wsUrl);
+      console.log('Attempting WebSocket connection to:', wsUrl);
+      
+      try {
+        ws = new WebSocket(wsUrl);
 
-      ws.onopen = () => {
-        console.log('Connected to ThunderBird server');
-        setConnected(true);
-        setError(null);
-      };
+        ws.onopen = () => {
+          console.log('Connected to ThunderBird server via WebSocket');
+          setConnected(true);
+          setError(null);
+          if (pollingInterval) clearInterval(pollingInterval);
+        };
 
-      ws.onmessage = (event) => {
-        try {
-          const data: SystemStatus = JSON.parse(event.data);
-          setStatus(data);
-        } catch (err) {
-          console.error('Error parsing message:', err);
-        }
-      };
+        ws.onmessage = (event) => {
+          try {
+            const data: SystemStatus = JSON.parse(event.data);
+            setStatus(data);
+          } catch (err) {
+            console.error('Error parsing message:', err);
+          }
+        };
 
-      ws.onerror = (event) => {
-        console.error('WebSocket connection error occurred');
-        console.error('WebSocket URL:', wsUrl);
-        console.error('WebSocket readyState:', ws?.readyState);
-        setError('Connection error - Unable to connect to server');
-      };
+        ws.onerror = (event) => {
+          console.error('WebSocket connection error occurred');
+          setError('Connection error - Falling back to polling');
+          
+          // Switch to polling on WebSocket error
+          if (!pollingInterval) {
+            fetchStatus();
+            pollingInterval = setInterval(fetchStatus, 5000);
+          }
+        };
 
-      ws.onclose = () => {
-        console.warn('Disconnected from server, attempting to reconnect...');
-        setConnected(false);
-        reconnectTimeout = setTimeout(connectWebSocket, 5000);
-      };
+        ws.onclose = () => {
+          setConnected(false);
+          if (isDev) {
+            reconnectTimeout = setTimeout(connectWebSocket, 5000);
+          }
+        };
+      } catch (err) {
+        console.error('Failed to create WebSocket:', err);
+        fetchStatus();
+        pollingInterval = setInterval(fetchStatus, 5000);
+      }
     };
 
     connectWebSocket();
@@ -107,13 +149,13 @@ export default function Home() {
     return () => {
       if (ws) ws.close();
       if (reconnectTimeout) clearTimeout(reconnectTimeout);
+      if (pollingInterval) clearInterval(pollingInterval);
     };
   }, []);
 
   const changeMode = async (mode: string) => {
     try {
-      const base = process.env.NEXT_PUBLIC_SERVER_URL || 'http://localhost:8080';
-      const response = await fetch(`${base}/api/mode`, {
+      const response = await fetch('/api/mode', {
         method: 'POST',
         headers: { 'Content-Type': 'application/json' },
         body: JSON.stringify({ mode }),
