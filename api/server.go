@@ -93,8 +93,14 @@ func getSystemStatus(w http.ResponseWriter, r *http.Request) {
 	now := time.Now()
 	rand.Seed(now.UnixNano())
 
+	// Read mode from query parameter (default to realtime)
+	requestedMode := r.URL.Query().Get("mode")
+	if requestedMode == "" {
+		requestedMode = "realtime"
+	}
+
 	status := SystemStatus{
-		SystemMode:     "realtime",
+		SystemMode:     requestedMode,
 		LastUpdateTime: now,
 		QuantumKeyPool: 100 + rand.Intn(50),
 		ActiveChannels: 5,
@@ -113,6 +119,13 @@ func getSystemStatus(w http.ResponseWriter, r *http.Request) {
 			ActiveThreats:           rand.Intn(2),
 			ResolvedThreats:         rand.Intn(10),
 		},
+	}
+
+	// Adjust metrics for scenario mode
+	if requestedMode == "scenario" {
+		status.BlockchainData.NetworkStatus = "under_attack"
+		status.AIMetrics.ActiveThreats = 2 + rand.Intn(3)
+		status.QuantumKeyPool = 50 + rand.Intn(30)
 	}
 
 	// Add mock satellites

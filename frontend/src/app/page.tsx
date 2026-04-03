@@ -61,6 +61,7 @@ export default function Home() {
   const [error, setError] = useState<string | null>(null);
   const [scenarioData, setScenarioData] = useState<any>(null);
   const [currentScenario, setCurrentScenario] = useState<string>('');
+  const [activeMode, setActiveMode] = useState<string>('realtime');
 
   useEffect(() => {
     let ws: WebSocket | null = null;
@@ -69,7 +70,7 @@ export default function Home() {
 
     const fetchStatus = async () => {
       try {
-        const response = await fetch('/api/status');
+        const response = await fetch(`/api/status?mode=${activeMode}`);
         if (response.ok) {
           const data: SystemStatus = await response.json();
           setStatus(data);
@@ -151,10 +152,13 @@ export default function Home() {
       if (reconnectTimeout) clearTimeout(reconnectTimeout);
       if (pollingInterval) clearInterval(pollingInterval);
     };
-  }, []);
+  }, [activeMode]);
 
   const changeMode = async (mode: string) => {
     try {
+      // Update local state immediately for better UX
+      setActiveMode(mode);
+      
       const response = await fetch('/api/mode', {
         method: 'POST',
         headers: { 'Content-Type': 'application/json' },
