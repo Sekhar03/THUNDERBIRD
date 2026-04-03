@@ -143,7 +143,7 @@ const Dashboard: React.FC<DashboardProps> = ({ status }) => {
                     </div>
                     <CardTitle className="text-sm sm:text-lg font-semibold text-blue-300">Quantum Security</CardTitle>
                   </div>
-                  <div className="w-1.5 h-1.5 sm:w-2 sm:h-2 bg-blue-400 rounded-full animate-pulse"></div>
+                  <div className="w-2 h-2 bg-blue-400 rounded-full animate-pulse shadow-[0_0_8px_rgba(96,165,250,0.4)]"></div>
                 </div>
               </CardHeader>
               <CardContent className="space-y-3 sm:space-y-4">
@@ -167,7 +167,7 @@ const Dashboard: React.FC<DashboardProps> = ({ status }) => {
                       <Clock className="h-3 w-3 sm:h-4 sm:w-4 text-blue-400" />
                       <span className="text-xs sm:text-sm text-gray-300">Last Update</span>
                     </div>
-                    <span className="text-xs text-blue-400">{new Date(status.lastUpdateTime).toLocaleTimeString()}</span>
+                    <span className="text-xs text-blue-400 whitespace-nowrap">{new Date(status.lastUpdateTime).toLocaleTimeString()}</span>
                   </div>
                 </div>
               </CardContent>
@@ -183,7 +183,7 @@ const Dashboard: React.FC<DashboardProps> = ({ status }) => {
                     </div>
                     <CardTitle className="text-sm sm:text-lg font-semibold text-purple-300">Blockchain Status</CardTitle>
                   </div>
-                  <div className="w-1.5 h-1.5 sm:w-2 sm:h-2 bg-purple-400 rounded-full animate-pulse"></div>
+                  <div className="w-2 h-2 bg-purple-400 rounded-full animate-pulse shadow-[0_0_8px_rgba(192,132,252,0.4)]"></div>
                 </div>
               </CardHeader>
               <CardContent className="space-y-3 sm:space-y-4">
@@ -234,7 +234,7 @@ const Dashboard: React.FC<DashboardProps> = ({ status }) => {
                     </div>
                     <CardTitle className="text-sm sm:text-lg font-semibold text-green-300">Satellite Fleet</CardTitle>
                   </div>
-                  <div className="w-1.5 h-1.5 sm:w-2 sm:h-2 bg-green-400 rounded-full animate-pulse"></div>
+                  <div className="w-2 h-2 bg-green-400 rounded-full animate-pulse shadow-[0_0_8px_rgba(74,222,128,0.4)]"></div>
                 </div>
               </CardHeader>
               <CardContent className="space-y-3 sm:space-y-4">
@@ -309,7 +309,7 @@ const Dashboard: React.FC<DashboardProps> = ({ status }) => {
                           </div>
                         </TableCell>
                         <TableCell className="text-center text-xs sm:text-sm text-gray-200 break-words">{sat.name}</TableCell>
-                        <TableCell className="text-center text-xs sm:text-sm text-cyan-200 font-mono">
+                        <TableCell className="text-center text-xs sm:text-sm text-cyan-200 font-mono whitespace-nowrap">
                           {Math.round(sat.altitude)} km
                         </TableCell>
                         <TableCell className="text-center text-xs sm:text-sm">

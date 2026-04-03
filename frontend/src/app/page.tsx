@@ -539,8 +539,8 @@ ${'═'.repeat(75)}
               {/* Multiple Glow Layers */}
               <div className="absolute inset-0 bg-gradient-to-r from-blue-400 via-purple-500 to-cyan-400 rounded-full blur-2xl opacity-40 animate-pulse-glow"></div>
               <div className="absolute inset-0 bg-gradient-to-r from-blue-400 to-purple-400 rounded-full blur-xl opacity-30 animate-pulse group-hover:opacity-50 transition-opacity duration-500"></div>
-              <div className="relative bg-gradient-to-br from-blue-500 via-purple-600 to-cyan-500 p-4 sm:p-5 rounded-full shadow-glow-lg group-hover:scale-110 transition-transform duration-300">
-                <Satellite className="h-7 w-7 sm:h-10 sm:w-10 text-white animate-float" aria-hidden="true" />
+              <div className="relative bg-gradient-to-br from-blue-500 via-purple-600 to-cyan-500 p-4 sm:p-5 rounded-full shadow-glow-lg group-hover:scale-110 transition-transform duration-300 flex items-center justify-center">
+                <Satellite className="h-7 w-7 sm:h-10 sm:w-10 text-white" aria-hidden="true" />
               </div>
             </div>
           </div>
@@ -558,14 +558,14 @@ ${'═'.repeat(75)}
           </div>
           
           <div className="mt-6 sm:mt-8 flex flex-col sm:flex-row items-center justify-center gap-4 sm:gap-6">
-            <div className={`glass-card px-4 py-2.5 rounded-full flex items-center space-x-3 shadow-lg hover:shadow-glow-md transition-all duration-300 group ${connected ? 'border-green-500/20' : 'border-red-500/20'}`}>
-              <div className="relative">
+            <div className={`glass-card px-4 py-2 rounded-full flex items-center space-x-3 shadow-lg hover:shadow-glow-md transition-all duration-300 group h-10 ${connected ? 'border-green-500/20' : 'border-red-500/20'}`}>
+              <div className="relative flex items-center justify-center">
                 <div className={`w-3 h-3 rounded-full ${connected ? 'bg-green-400 shadow-[0_0_8px_rgba(74,222,128,0.6)]' : 'bg-red-400'}`}></div>
                 {connected && (
                   <div className="absolute inset-0 w-3 h-3 rounded-full bg-green-400 animate-pulse-ring"></div>
                 )}
               </div>
-              <span className="text-sm font-medium group-hover:text-white transition-colors">
+              <span className="text-sm font-medium group-hover:text-white transition-colors whitespace-nowrap">
                 {connected ? "System Online" : "System Offline"}
               </span>
             </div>
@@ -585,9 +585,9 @@ ${'═'.repeat(75)}
 
               {/* Admin Login Button */}
               <Link href="/admin/login">
-                <Button className="glass-card h-10 px-6 rounded-full shadow-lg bg-gradient-to-r from-purple-500/80 to-pink-600/80 hover:from-purple-600 hover:to-pink-700 border border-purple-400/30 hover:shadow-glow-md transition-all duration-300 hover:scale-105 flex items-center">
-                  <Shield className="h-4 w-4 mr-2" />
-                  <span className="font-semibold text-sm">Admin Login</span>
+                <Button className="glass-card h-10 px-6 rounded-xl shadow-lg bg-white/5 hover:bg-white/10 border border-white/10 hover:border-purple-500/40 hover:shadow-glow-sm transition-all duration-300 hover:scale-105 flex items-center">
+                  <Shield className="h-4 w-4 mr-2 text-purple-400" />
+                  <span className="font-semibold text-sm text-gray-200">Admin Login</span>
                 </Button>
               </Link>
             </div>
