@@ -216,9 +216,9 @@ const Dashboard: React.FC<DashboardProps> = ({ status }) => {
                     </div>
                     <Badge 
                       variant="default" 
-                      className={`capitalize text-xs ${status.blockchainData.networkStatus === 'active' ? 'bg-green-500/80' : status.blockchainData.networkStatus === 'degraded' ? 'bg-orange-500/80' : 'bg-red-500/80'}`}
+                      className={`capitalize text-xs px-3 py-1 rounded-full ${status.blockchainData.networkStatus === 'active' ? 'bg-green-500/80 shadow-[0_0_10px_rgba(34,197,94,0.3)]' : status.blockchainData.networkStatus === 'degraded' ? 'bg-orange-500/80' : 'bg-red-500/80 animate-pulse'}`}
                     >
-                      {status.blockchainData.networkStatus}
+                      {status.blockchainData.networkStatus.replace('_', ' ')}
                     </Badge>
                   </div>
                 </div>
@@ -285,7 +285,7 @@ const Dashboard: React.FC<DashboardProps> = ({ status }) => {
                   <TableHeader>
                     <TableRow className="bg-gradient-to-r from-cyan-900/50 to-blue-900/50 border-b border-cyan-500/20">
                       {['ID', 'Name', 'Altitude', 'Status', 'Last Contact', 'Key ID'].map((header) => (
-                        <TableHead key={header} className="text-cyan-300 font-semibold text-center py-4 sm:py-5 text-xs sm:text-sm">
+                        <TableHead key={header} className="text-cyan-300 font-semibold text-center py-4 sm:py-6 text-xs sm:text-sm uppercase tracking-wider">
                           {header}
                         </TableHead>
                       ))}
@@ -316,7 +316,7 @@ const Dashboard: React.FC<DashboardProps> = ({ status }) => {
                         <TableCell className="text-center text-xs sm:text-sm">
                           <Badge 
                             variant="outline" 
-                            className={`capitalize border text-xs sm:text-sm ${getStatusColor(sat.status)} rounded-full px-3 py-1`}
+                            className={`capitalize border text-xs sm:text-sm ${getStatusColor(sat.status)} rounded-full px-3 py-1 min-w-[100px] justify-center`}
                           >
                             {sat.status.replace('_', ' ')}
                           </Badge>

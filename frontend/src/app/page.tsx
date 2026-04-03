@@ -505,14 +505,10 @@ ${'═'.repeat(75)}
         <div className="absolute top-1/2 left-1/2 w-96 h-96 bg-space-cyan/10 rounded-full blur-3xl animate-float-slow" style={{ animationDelay: '4s' }}></div>
       </div>
       
-      {/* Enhanced Floating Particles */}
-      <div className="fixed inset-0 overflow-hidden pointer-events-none">
-        <div className="absolute top-1/4 left-1/4 w-2 h-2 bg-blue-400 rounded-full animate-pulse opacity-60"></div>
-        <div className="absolute top-3/4 right-1/4 w-1 h-1 bg-purple-400 rounded-full animate-ping opacity-40"></div>
-        <div className="absolute top-1/2 left-3/4 w-1.5 h-1.5 bg-cyan-400 rounded-full animate-bounce opacity-50"></div>
-        <div className="absolute bottom-1/4 left-1/2 w-1 h-1 bg-green-400 rounded-full animate-pulse opacity-30"></div>
-        <div className="absolute top-1/3 right-1/3 w-1.5 h-1.5 bg-space-blue rounded-full animate-float opacity-40"></div>
-        <div className="absolute bottom-1/3 left-2/3 w-1 h-1 bg-space-cyan rounded-full animate-float-slow opacity-35"></div>
+      {/* Reduced Floating Particles to avoid being mistaken for stray dots */}
+      <div className="fixed inset-0 overflow-hidden pointer-events-none opacity-20">
+        <div className="absolute top-1/3 left-1/4 w-1.5 h-1.5 bg-blue-400/30 rounded-full animate-float opacity-40"></div>
+        <div className="absolute bottom-1/4 right-1/3 w-1 h-1 bg-purple-400/20 rounded-full animate-float-slow opacity-30"></div>
       </div>
 
       <Head>
@@ -549,57 +545,52 @@ ${'═'.repeat(75)}
             </div>
           </div>
           
-          <h1 className="text-4xl sm:text-5xl md:text-6xl lg:text-7xl xl:text-8xl font-bold mb-4 sm:mb-6 bg-gradient-to-r from-blue-400 via-purple-400 to-cyan-400 bg-clip-text text-transparent bg-[length:200%_auto] animate-gradient-shift drop-shadow-lg">
+          <h1 className="text-4xl sm:text-5xl md:text-6xl lg:text-7xl xl:text-8xl font-black mb-4 sm:mb-6 bg-gradient-to-r from-blue-400 via-purple-400 to-cyan-400 bg-clip-text text-transparent bg-[length:200%_auto] animate-gradient-shift drop-shadow-2xl tracking-tight">
             ThunderBird
           </h1>
-          <p className="text-lg sm:text-xl md:text-2xl lg:text-3xl text-gray-300 font-light px-4 mb-2 text-balance">
-            Quantum Space Communications
-          </p>
-          <p className="text-sm sm:text-base text-gray-400 px-4 max-w-2xl mx-auto text-balance">
-            Real-time satellite monitoring • Quantum security • Blockchain integration
-          </p>
+          <div className="flex flex-col items-center">
+            <p className="text-lg sm:text-xl md:text-2xl lg:text-3xl text-gray-300 font-light px-4 mb-2 text-balance leading-tight">
+              Quantum Space Communications
+            </p>
+            <p className="text-sm sm:text-base text-gray-400 px-4 max-w-2xl mx-auto text-balance opacity-80 backdrop-blur-sm">
+              Real-time satellite monitoring • Quantum security • Blockchain integration
+            </p>
+          </div>
           
           <div className="mt-6 sm:mt-8 flex flex-col sm:flex-row items-center justify-center gap-4 sm:gap-6">
-            {/* Enhanced Status Indicator */}
-            <div className="glass-card px-4 py-2.5 rounded-full flex items-center space-x-3 shadow-lg hover:shadow-glow-md transition-all duration-300 group">
+            <div className={`glass-card px-4 py-2.5 rounded-full flex items-center space-x-3 shadow-lg hover:shadow-glow-md transition-all duration-300 group ${connected ? 'border-green-500/20' : 'border-red-500/20'}`}>
               <div className="relative">
-                <div className={`w-3 h-3 rounded-full ${connected ? 'bg-green-400' : 'bg-red-400'}`}></div>
+                <div className={`w-3 h-3 rounded-full ${connected ? 'bg-green-400 shadow-[0_0_8px_rgba(74,222,128,0.6)]' : 'bg-red-400'}`}></div>
                 {connected && (
                   <div className="absolute inset-0 w-3 h-3 rounded-full bg-green-400 animate-pulse-ring"></div>
                 )}
               </div>
-              <span className="text-sm sm:text-base font-medium group-hover:text-white transition-colors">
-                {connected ? (
-                  <span className="flex items-center gap-2">
-                    <span className="text-green-400">●</span> System Online
-                  </span>
-                ) : (
-                  <span className="flex items-center gap-2">
-                    <span className="text-red-400">●</span> System Offline
-                  </span>
-                )}
+              <span className="text-sm font-medium group-hover:text-white transition-colors">
+                {connected ? "System Online" : "System Offline"}
               </span>
             </div>
             
-            <div className="glass-card px-4 py-2 rounded-full shadow-lg">
-              <ThemeToggle 
-                onExport={(format) => {
-                  if (!status) {
-                    alert('No data available to export');
-                    return;
-                  }
-                  handleExport(format, status);
-                }}
-              />
-            </div>
+            <div className="flex items-center gap-4 sm:gap-6 flex-wrap justify-center">
+              <div className="glass-card px-2 py-1.5 rounded-full shadow-lg border border-white/10 flex items-center">
+                <ThemeToggle 
+                  onExport={(format: 'pdf' | 'csv' | 'json') => {
+                    if (!status) {
+                      alert('No data available to export');
+                      return;
+                    }
+                    handleExport(format, status);
+                  }}
+                />
+              </div>
 
-            {/* Admin Login Button */}
-            <Link href="/admin/login">
-              <Button className="glass-card px-6 py-2.5 rounded-full shadow-lg bg-gradient-to-r from-purple-500 to-pink-600 hover:from-purple-600 hover:to-pink-700 border border-purple-400/30 hover:shadow-glow-md transition-all duration-300 hover:scale-105">
-                <Shield className="h-4 w-4 mr-2" />
-                <span className="font-semibold">Admin Login</span>
-              </Button>
-            </Link>
+              {/* Admin Login Button */}
+              <Link href="/admin/login">
+                <Button className="glass-card h-10 px-6 rounded-full shadow-lg bg-gradient-to-r from-purple-500/80 to-pink-600/80 hover:from-purple-600 hover:to-pink-700 border border-purple-400/30 hover:shadow-glow-md transition-all duration-300 hover:scale-105 flex items-center">
+                  <Shield className="h-4 w-4 mr-2" />
+                  <span className="font-semibold text-sm">Admin Login</span>
+                </Button>
+              </Link>
+            </div>
           </div>
         </header>
 
