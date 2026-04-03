@@ -7,16 +7,44 @@
       "config": {
         "distDir": ".next"
       }
+    },
+    {
+      "src": "server/api.go",
+      "use": "@vercel/go"
+    },
+    {
+      "src": "simulator/api.go",
+      "use": "@vercel/go"
     }
   ],
   "routes": [
     {
+      "src": "/api/status",
+      "dest": "server/api.go"
+    },
+    {
+      "src": "/api/mode",
+      "dest": "server/api.go"
+    },
+    {
+      "src": "/ws",
+      "dest": "server/api.go"
+    },
+    {
+      "src": "/telemetry",
+      "dest": "simulator/api.go"
+    },
+    {
+      "src": "/api/server/(.*)",
+      "dest": "server/api.go"
+    },
+    {
+      "src": "/api/simulator/(.*)",
+      "dest": "simulator/api.go"
+    },
+    {
       "src": "/(.*)",
-      "dest": "/frontend/$1"
+      "dest": "frontend/$1"
     }
-  ],
-  "buildCommand": "cd frontend && npm install && npm run build",
-  "outputDirectory": "frontend/.next"
+  ]
 }
-
-
