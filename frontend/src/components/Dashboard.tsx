@@ -216,9 +216,8 @@ const Dashboard: React.FC<DashboardProps> = ({ status }) => {
                     </div>
                     <Badge 
                       variant="default" 
-                      className={`capitalize text-xs px-3 py-1 rounded-full ${status.blockchainData.networkStatus === 'active' ? 'bg-green-500/80 shadow-[0_0_10px_rgba(34,197,94,0.3)]' : status.blockchainData.networkStatus === 'degraded' ? 'bg-orange-500/80' : 'bg-red-500/80 animate-pulse'}`}
                     >
-                      {status.blockchainData.networkStatus.replace('_', ' ')}
+                      {status.blockchainData.networkStatus.split('_').join(' ')}
                     </Badge>
                   </div>
                 </div>
@@ -318,7 +317,7 @@ const Dashboard: React.FC<DashboardProps> = ({ status }) => {
                             variant="outline" 
                             className={`capitalize border text-xs sm:text-sm ${getStatusColor(sat.status)} rounded-full px-3 py-1 min-w-[100px] justify-center`}
                           >
-                            {sat.status.replace('_', ' ')}
+                            {sat.status.split('_').join(' ')}
                           </Badge>
                         </TableCell>
                         <TableCell className="text-center text-xs sm:text-sm text-gray-200 break-words">
